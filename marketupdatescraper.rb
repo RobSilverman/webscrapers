@@ -1,4 +1,4 @@
-# to do: pull vix numbers, get full name for most active option symbol
+# to do: get full name for most active option symbol
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
@@ -122,4 +122,5 @@ puts divider
 puts "Vix:"
 puts vixData
 puts divider
-#puts "At present, the S&P 500 is #{spMod} #{indexData[2]}, the DJIA is #{dowMod} #{indexData[1]}, and the NASDAQ is #{daqMod} #{indexData[0]}."
+puts "At present, the S&P 500 is #{spMod} #{indexData[2]}, the DJIA is #{dowMod} #{indexData[1]}, and the NASDAQ is #{daqMod} #{indexData[0]}."
+puts "Industries doing well today include ABCDEFG. Industries showing weakness include ABCDEFG. The VIX is #{vixMod} #{vixData[2]} to #{vixData[0]} after the previous close of #{vixData[1]}. The most heavily traded options this morning are for the ABCDEFGHIJKLMN (#{topOpt[0]}), with #{topOpt[3]} #{topOpt[1]} $#{topOpt[2]} #{topOptDesc}s on the board. The total put/call ratio as of 10:30 AM was #{pcData[3]} (#{pcData[1]}/#{pcData[0]}). The advancers/decliners ratio for NYSE stocks is #{nysAdvDec[0]}/#{nysAdvDec[1]} while the advancers/decliners ratio for NASDAQ stocks is #{daqAdvDec[0]}/#{daqAdvDec[1]}."

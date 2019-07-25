@@ -10,6 +10,7 @@ pcURL = 'http://www.cboe.com/data/current-market-statistics'
 daqURL = 'https://www.nasdaq.com/markets/most-active.aspx'
 nysURL = 'https://www.nasdaq.com/markets/most-active.aspx?exchange=NYSE'
 cnnURL = 'https://money.cnn.com/data/markets/'
+vixURL = 'http://www.cboe.com/vix'
 
 #activeLink = pcURL
 
@@ -61,9 +62,9 @@ indexData = []
 spMod = ""
 dowMod = ""
 daqMod = ""
-indexData.push(page.css('span.posData')[0].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
-indexData.push(page.css('span.posData')[2].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
-indexData.push(page.css('span.posData')[4].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
+indexData.push(page.css('ul.three-equal-columns li.column')[0].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
+indexData.push(page.css('ul.three-equal-columns li.column')[1].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
+indexData.push(page.css('ul.three-equal-columns li.column')[2].to_str.match(/[\+\-]{1}\d{1,}\.\d{2}\%/))
 if indexData[0].to_s[0] == "+"
     dowMod = "up"
 else
@@ -80,6 +81,21 @@ else
     spMod = "down"
 end
 
+# pull VIX data (price, change, close) into array and set modifier variable
+page = Nokogiri::HTML(open(vixURL))
+vixData = []
+vixMod = ""
+vixData.push(page.css("div.col2")[0].to_str.match(/\d{1,2}\.\d{2}/))
+vixData.push(page.css("div.col2")[1].to_str.match(/\d{1,2}\.\d{2}/))
+currentVix = vixData[0].to_s
+eodVix = vixData[1].to_s
+changeVix = currentVix.to_f - eodVix.to_f
+vixData.push(changeVix.round(2))
+if vixData[2] > 0
+    vixMod = "up"
+else
+    vixMod = "down"
+end
 
 divider = "-------------------------"
 puts "Top Call:"
@@ -103,4 +119,7 @@ puts divider
 puts "Major Index %'s:"
 puts indexData
 puts divider
-puts "At present, the S&P 500 is #{spMod} #{indexData[2]}, the DJIA is #{dowMod} #{indexData[1]}, and the NASDAQ is #{daqMod} #{indexData[0]}."
+puts "Vix:"
+puts vixData
+puts divider
+#puts "At present, the S&P 500 is #{spMod} #{indexData[2]}, the DJIA is #{dowMod} #{indexData[1]}, and the NASDAQ is #{daqMod} #{indexData[0]}."
